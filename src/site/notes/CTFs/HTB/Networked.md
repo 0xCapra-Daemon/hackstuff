@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/networked/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/networked/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 # By 0xCapra_Daemon aka Will Keller

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/busqueda/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/busqueda/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 ## by: 0xCapra_Daemon aka William Keller

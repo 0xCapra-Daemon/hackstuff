@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/monitored/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/monitored/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 #linux 

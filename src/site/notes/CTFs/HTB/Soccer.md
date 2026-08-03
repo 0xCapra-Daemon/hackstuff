@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/soccer/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/soccer/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 #linux #webhooks #python #doas #SUID #scripting #portforwarding

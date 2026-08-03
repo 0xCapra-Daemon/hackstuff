@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/sua/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/sua/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 A Linux CTF from HackTheBox

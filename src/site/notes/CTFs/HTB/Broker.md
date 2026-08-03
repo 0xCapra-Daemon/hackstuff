@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/broker/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/broker/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 #linux #apache-mq #sudo #nginx

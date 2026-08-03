@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/intentions/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/intentions/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 #linux #bcrypt #api

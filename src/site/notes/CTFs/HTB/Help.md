@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/help/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/help/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 #linux #sqlinjection #kernel_exploit #password #john

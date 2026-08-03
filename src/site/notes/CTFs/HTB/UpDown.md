@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/ct-fs/htb/up-down/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/ct-fs/htb/up-down/","dgShowFileTree":true,"dg-note-properties":{}}
 ---
 
 A linux ctf from hackthebox
