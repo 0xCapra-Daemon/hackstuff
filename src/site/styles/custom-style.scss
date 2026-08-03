@@ -10,6 +10,29 @@ body {
     //  h1 {
     //   color: black;
     //  }
+    @media (min-width: 1400px) {
+    /* 1. Reset the massive dynamic margin pushing the content right */
+    .content {
+        margin-left: calc(var(--dg-filetree-min-width) + var(--dg-filetree-gap)) !important;
+        margin-right: auto !important;
+    }
+
+    /* 2. Tighten the file tree wrapper width so it matches the tree */
+    .filetree-wrapper {
+        width: var(--dg-filetree-width) !important;
+        justify-content: flex-start !important;
+    }
+
+    /* 3. Pull the floating right sidebar back into position next to the text */
+    .sidebar {
+        left: calc(
+            var(--dg-filetree-min-width) + 
+            var(--dg-filetree-gap) + 
+            var(--dg-content-max-width) + 
+            var(--dg-sidebar-gap)
+        ) !important;
+    }
+}
 
 
 }
