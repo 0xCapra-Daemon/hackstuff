@@ -1,9 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/home-page/","dg-note-properties":{}}
+{"dg-publish":true,"permalink":"/home-page/","tags":["gardenEntry"],"dg-note-properties":{}}
 ---
 
-
-What's up?
-Properties
-- [x] dg-publish
-- [x] dg-home
+What's up
