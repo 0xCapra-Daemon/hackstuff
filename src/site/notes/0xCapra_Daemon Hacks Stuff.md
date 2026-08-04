@@ -5,7 +5,8 @@
 ## Hey. My Name is Will AKA `0xCapra_Daemon` online. I'm an ethical hacker.
 ### Welcome to my blog. I post all my CTF writeups, notes, tools, etc. here. <br>
 
----<br>
+---
+<br>
 <br>
 
 #### What I'm currently up to
