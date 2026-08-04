@@ -10118,12 +10118,13 @@ kbd {
   position: relative;
   padding: var(--size-4-3) var(--size-4-4);
   min-height: 38px;
-  max-height: 225px !important;
+  max-height: 220px !important;
   background-color: var(--code-background);
   border-radius: var(--code-radius);
-  white-space: var(--code-white-space);
+  white-space: pre-wrap !imporant;
+  word-break: break-all !imporant;
   border: var(--code-border-width) solid var(--code-border-color);
-  overflow-x: auto;
+  overflow-x: hidden !important;
   overflow-y: auto !important;
 }
 .markdown-rendered pre code {
