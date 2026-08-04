@@ -38,16 +38,20 @@ body {
   
     .content-container {
       margin: 0 auto;
-      max-width: 90vw;
+      max-width: calc(100vw - var(--sidebar-width, 300px)) !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
     .markdown-rendered pre[class*="language-"], 
     .markdown-rendered code[class*="language-"],
     .content pre,
     .content code {
-      max-width: 100% !important;
-      white-space: pre-wrap !important;       /* Forces text to wrap at spaces */
-      word-break: break-all !important;       /* Breaks long single strings if needed */
-      overflow-x: hidden !important;          /* Hides any accidental scrollbars */
+        max-width: 100% !important;
+        white-space: pre-wrap !important;       /* Forces text to wrap at spaces */
+        word-break: break-word !important;       /* Breaks long single strings if needed */
+        overflow-x: hidden !important;          /* Hides any accidental scrollbars */
+        font-size:.085em !important;
+        line-height: 1.4 !important;
     }
 
 }
