@@ -1077,7 +1077,9 @@ uid=0(root) gid=0(root) groups=0(root)
 # 
 ```
 Found advisory on `GTFOBins` that tells us how to execute a local shell with ssh. Since we have sudo permissions, this particular command string doesn't drop those permissions and gives us a root shell. Pwned.
-## Takeaways
-- When fuzzing/dir bruting/firing off wordlists, be sure to find a wordlist for the framework you discover.
-- If at first your payload won't work, especially in the context of HTML POST requests/input filters, bad characters, etc. remember to mangle the spaces with $IFS and url encode/decode items as needed.
-- specify the host in `psql` if given one from a leaked config, note, etc.
+
+## Final Thoughts
+>[!Takeaways]-
+>- When fuzzing/dir bruting/firing off wordlists, be sure to find a wordlist for the framework you discover.
+>- If at first your payload won't work, especially in the context of HTML POST requests/input filters, bad characters, etc. remember to mangle the spaces with $IFS and url encode/decode items as needed.
+>- specify the host in `psql` if given one from a leaked config, note, etc.
