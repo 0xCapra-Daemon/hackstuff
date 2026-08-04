@@ -34,21 +34,4 @@ body {
     }
 }
 
-    /* Force dark mode values for the main digital garden reading container */
-    body.theme-dark, .theme-dark, :root {
-    --background-primary: #2f3437 !important;
-    --background-secondary: #202426 !important;
-    --text-normal: #ffffff !important;
-    --text-muted: #9b9b9b !important;
-    --text-faint: #60666a !important;
-    --text-accent: #2eaadc !important;
-}
-
-/* Force the wrapper layout elements */
-.content, main, article, .markdown-rendered {
-    background-color: #2f3437 !important;
-    color: #ffffff !important;
-}
-
-
 }
