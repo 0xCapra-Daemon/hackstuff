@@ -10125,7 +10125,7 @@ kbd {
   word-break: break-all !important;
   border: var(--code-border-width) solid var(--code-border-color);
   overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
 }
 .markdown-rendered pre code {
   border: none;
