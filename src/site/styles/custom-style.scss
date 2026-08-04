@@ -55,6 +55,15 @@ body {
         --dg-search-btn-height: 44px;              // Meets mobile ergonomics standard (min 44px)
         --dg-content-font-size: 16px;              // Optimized baseline mobile text sizing
     }
+    .markdown-rendered p {
+        margin-block-start: var(--p-spacing);
+        margin-block-end: var(--p-spacing);
+        unicode-bidi: plaintext;
+        font-size: 20px;
+        line-height: 2 !important;
+}
+
+:
 }
 
   
