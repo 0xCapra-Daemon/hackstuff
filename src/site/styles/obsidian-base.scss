@@ -10117,8 +10117,9 @@ kbd {
 .markdown-rendered pre {
   position: relative;
   padding: var(--size-4-3) var(--size-4-4);
+  max-width: 300px !important;
   min-height: 38px;
-  max-height: 220px !important;
+  max-height: 420px !important;
   background-color: var(--code-background);
   border-radius: var(--code-radius);
   white-space: pre-wrap !important;
