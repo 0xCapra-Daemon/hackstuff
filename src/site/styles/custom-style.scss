@@ -40,5 +40,10 @@ body {
       margin: 0 auto;
       max-width: 90vw;
     }
+    pre, code {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      white-space: pre !important; 
+    }
 
 }
