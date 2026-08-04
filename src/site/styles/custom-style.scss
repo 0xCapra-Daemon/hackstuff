@@ -42,8 +42,9 @@ body {
     }
     pre, code {
       max-width: 100% !important;
-      overflow-x: auto !important;
-      white-space: pre !important; 
+      white-space: pre-wrap !important;       /* Forces text to wrap at spaces */
+      word-break: break-all !important;       /* Breaks long single strings if needed */
+      overflow-x: hidden !important;          /* Hides any accidental scrollbars */
     }
 
 }
