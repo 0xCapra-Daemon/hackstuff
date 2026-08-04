@@ -13,6 +13,21 @@ body {
      --dg-content-margin-top-mobile: 80px;
      --dg-navbar-title-size-mobile: 1.1rem;      // Prevents long note titles from clipping
      --dg-logo-height-mobile: 28px;             // Scales down your logo for phone screens
+    /* Restores standard syntax highlighting colors within code blocks */
+    .markdown-rendered code[class*="language-"],
+    .markdown-rendered pre[class*="language-"] {
+        color: #f8f8f2 !important; /* Reset default text from green to off-white */
+    }
+
+    /* Specific Prism.js / Digital Garden syntax tokens */
+    .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #828bb8 !important; }
+    .token.punctuation { color: #89ddff !important; }
+    .token.property, .token.tag, .token.constant, .token.symbol, .token.deleted { color: #f07178 !important; }
+    .token.boolean, .token.number { color: #f78c6c !important; }
+    .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #c3e88d !important; }
+    .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string { color: #89ddff !important; }
+    .token.atrule, .token.attr-value, .token.keyword { color: #c792ea !important; }
+    .token.function, .token.class-name { color: #82b1ff !important; }
 }
 @media (min-width: 1400px) {
     /* 1. Reset the massive dynamic margin pushing the content right */
