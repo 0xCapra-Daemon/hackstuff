@@ -12534,7 +12534,7 @@ em {
   margin-block-end: var(--p-spacing);
   unicode-bidi: plaintext;
   font-size: 20px;
-  line-height: 2;
+  line-height: 2 !important;
   margin-right: 150px;
 }
 .markdown-rendered mark {
