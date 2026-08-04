@@ -10125,7 +10125,7 @@ kbd {
   white-space: pre-wrap !important;
   word-break: break-all !important;
   border: var(--code-border-width) solid var(--code-border-color);
-  overflow-x: hidden !important;
+  overflow-x: auto !important;
   overflow-y: auto !important;
 }
 .markdown-rendered pre code {
@@ -10237,7 +10237,6 @@ code[class*="language-"] {
   color: var(--code-normal);
   background: none;
   word-wrap: break-word;
-  white-space: pre-wrap;
   word-break: normal;
   direction: ltr;
   font-family: var(--font-monospace);
