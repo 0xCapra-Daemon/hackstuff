@@ -13,7 +13,6 @@ body {
     @media (min-width: 1400px) {
     /* 1. Reset the massive dynamic margin pushing the content right */
     .content {
-        margin-left: calc(var(--dg-filetree-min-width) + var(--dg-filetree-gap)) !important;
         margin-right: auto !important;
         max-width: 1100px !important; /* or a specific width like 1100px */
         width: 100%;
