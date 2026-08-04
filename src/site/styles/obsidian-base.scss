@@ -10117,7 +10117,7 @@ kbd {
 .markdown-rendered pre {
   position: relative;
   padding: var(--size-4-3) var(--size-4-4);
-  max-width: 300px !important;
+  max-width: 800px !important;
   min-height: 38px;
   max-height: 420px !important;
   background-color: var(--code-background);
@@ -10126,7 +10126,7 @@ kbd {
   word-break: break-all !important;
   border: var(--code-border-width) solid var(--code-border-color);
   overflow-x: hidden !important;
-  overflow-y: hidden !important;
+  overflow-y: auto !important;
 }
 .markdown-rendered pre code {
   border: none;
