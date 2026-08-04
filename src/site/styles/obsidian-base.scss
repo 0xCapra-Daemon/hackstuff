@@ -12533,6 +12533,9 @@ em {
   margin-block-start: var(--p-spacing);
   margin-block-end: var(--p-spacing);
   unicode-bidi: plaintext;
+  font-size: 20px;
+  line-height: 2;
+  margin-right: 150px;
 }
 .markdown-rendered mark {
   background-color: var(--text-highlight-bg);
