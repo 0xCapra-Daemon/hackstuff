@@ -10118,11 +10118,13 @@ kbd {
   position: relative;
   padding: var(--size-4-3) var(--size-4-4);
   min-height: 38px;
+  max-height: 225px; !important
   background-color: var(--code-background);
   border-radius: var(--code-radius);
   white-space: var(--code-white-space);
   border: var(--code-border-width) solid var(--code-border-color);
   overflow-x: auto;
+  overflow-y: auto; !important
 }
 .markdown-rendered pre code {
   border: none;
@@ -10237,7 +10239,7 @@ code[class*="language-"] {
   word-break: normal;
   direction: ltr;
   font-family: var(--font-monospace);
-  font-size: 0.75em;
+  font-size: 0.55em; !important
   text-align: left;
   word-spacing: normal;
   line-height: var(--line-height-normal);
