@@ -829,8 +829,8 @@ uid=0(root) gid=0(root) groups=0(root)
 As per `gtfobins` we navigate to the BackDrop CMS root folder `/var/www/html` and call the executable with `eval "system('bin/bash');"` as the arguments spawning an interactive session as `root`. pwned.
 
 >[!info]
-![Pasted image 20260810110336.png](/img/user/Pasted%20image%2020260810110336.png)
->![Pasted image 20260810110259.png](/img/user/Pasted%20image%2020260810110259.png)
+![Pasted image 20260810110336.png](/img/user/CTFs/HTB/Images/Dog%20Images/Pasted%20image%2020260810110336.png)
+>![Pasted image 20260810110259.png](/img/user/CTFs/HTB/Images/Dog%20Images/Pasted%20image%2020260810110259.png)
 [GTFOBins](https://gtfobins.org/gtfobins/bee/) States that `/usr/bin/bee` inherits commands directly from `php`. So we simply call a shell execution as the argument and get an interactive session.
 
 ## Takeaways
