@@ -324,7 +324,7 @@ Finally find our app.ini file in `/home/developer/gitea/data/gitea/conf/app.ini`
 
 >[!info]
 ![Pasted image 20260813142610.png](/img/user/CTFs/HTB/Images/Titanic%20Images/Pasted%20image%2020260813142610.png)
-As you can see, the `gitea` docs for docker images show that customization files ar stored in `/data/gitea/`. 
+As you can see, the `gitea` docs for docker images show that customization files are stored in `/data/gitea/`. 
 
 
 ```zsh
