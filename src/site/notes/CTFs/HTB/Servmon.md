@@ -3,10 +3,8 @@
 ---
 
 #windows #nvms-1000 #ftp #smb #printnightmare #LFI 
-
-
 ## Recon
-![Pasted image 20260817123607.png](/img/user/Pasted%20image%2020260817123607.png)
+![Pasted image 20260817123607.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817123607.png)
 
 ### Nmap:
 ```zsh
@@ -259,20 +257,20 @@ Inside both documents we see that Nadine left a file called `Passwords.txt` on `
 
 ### Port 80 Web
 #### Manual Enumeration
-![Pasted image 20260817125105.png](/img/user/Pasted%20image%2020260817125105.png)
+![Pasted image 20260817125105.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817125105.png)
 Visiting in the browser we can see the NVMS public access that `Nathan` has not yet removed.
 
-![Pasted image 20260817130223.png](/img/user/Pasted%20image%2020260817130223.png)
+![Pasted image 20260817130223.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817130223.png)
 Passing our request through devtools we can see that our login payload is sent via xml 1.0. this version is weak to an XXE attack. But come up short.
 
-![Pasted image 20260817135403.png](/img/user/Pasted%20image%2020260817135403.png)
+![Pasted image 20260817135403.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817135403.png)
 Online research revealed a `msf` module called `tvt_nvms_traversal` from [Rapid7](https://www.rapid7.com/db/modules/auxiliary/scanner/http/tvt_nvms_traversal/) that can read arbitrary system files for affected versions. I decided to try it and it worked.
 
 >[!info]
->![Pasted image 20260817135904.png](/img/user/Pasted%20image%2020260817135904.png)
+>![Pasted image 20260817135904.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817135904.png)
 > As you can see this module exploits a vulnerability in NVMS-1000 that has a directory traversal vulnerability within it's base `GET /` request (i.e. `GET /../../../../../../../../windows/windows.ini)
 
-![Pasted image 20260817140716.png](/img/user/Pasted%20image%2020260817140716.png)
+![Pasted image 20260817140716.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817140716.png)
 Remembering our note in `Confidential.txt` we set the file path for `/Users/Nathan/Desktop/Passwords.txt` and successfully exfiltrate the contents which appear to be a simple list of passwords. Our [[CTFs/HTB/Servmon#Port 8443 HTTPS\|NSClient++]] instance on the target takes password only auth. Let's try fuzzing both login portals with this list of creds.
 
 
@@ -280,7 +278,7 @@ Remembering our note in `Confidential.txt` we set the file path for `/Users/Nath
 
 ### Port 8443 HTTPS
 #### Manual Enumeration
-![Pasted image 20260817131900.png](/img/user/Pasted%20image%2020260817131900.png)
+![Pasted image 20260817131900.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817131900.png)
 Visiting in the browser we see it's running `NSClient++` with a simple login form. After attempting to login several times incorrectly there is no lockout policy in place. Let's see if we can attack this portal.
 
 
@@ -363,7 +361,7 @@ PRINTNIG... 10.129.227.77   445    SERVMON          Vulnerable, next step https:
 Manually enumerating various modules within `nxc smb` we find that the target is vulnerable to `PrintNightmare`. Finding an entry for it on [Hacker Recipes](https://www.thehacker.recipes/ad/movement/print-spooler-service/printnightmare) we begin to setup the exploit conditions.
 
 >[!info]
->![Pasted image 20260817143418.png](/img/user/Pasted%20image%2020260817143418.png)
+>![Pasted image 20260817143418.png](/img/user/CTFs/HTB/Images/Servmon%20Images/Pasted%20image%2020260817143418.png)
 >PrintNightmare is an RCE vulnerability that abuses a misconfigred/unpatched Print Spooler service on Windows devices.
 
 ```zsh
