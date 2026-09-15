@@ -8,7 +8,7 @@ Can you escape?
 
 
 ## Recon
-![Pasted image 20260827135015.png](/img/user/Pasted%20image%2020260827135015.png)
+![Pasted image 20260827135015.png](/img/user/CTFs/HTB/Images/Escape%20Images/Pasted%20image%2020260827135015.png)
 
 ### Nmap:
 ```zsh
@@ -184,10 +184,10 @@ getting file \SQL Server Procedures.pdf of size 49551 as SQL Server Procedures.p
 ```
 Logging into the share we see one document called `SQL Server Procedures.pdf` and we successfully exfiltrate it to our attacker machine.
 
-![Pasted image 20260827141312.png](/img/user/Pasted%20image%2020260827141312.png)
+![Pasted image 20260827141312.png](/img/user/CTFs/HTB/Images/Escape%20Images/Pasted%20image%2020260827141312.png)
 In the document we find instructions for accessing the exposed sql server and an email for user `Brandon` at `brandon.brown@sequel.htb` which is confirmed from our previous rid brute.
 
-![Pasted image 20260827141429.png](/img/user/Pasted%20image%2020260827141429.png)
+![Pasted image 20260827141429.png](/img/user/CTFs/HTB/Images/Escape%20Images/Pasted%20image%2020260827141429.png)
 At the bottom of the document we also see creds for any that are "waiting for their users to be created". We may be able to pull sensitive data with these creds from the database.
 
 ```zsh
@@ -465,7 +465,7 @@ Successfully authenticate as `Ryan.Cooper` on the server.
 As we enumerate for any Active Directory Certificate Services abuses we see one for the `ESC1` vulnerability. This vulnerability allows the enrollee (us) to supply the `subject` which is the name of any account in that environment and authenticate to the Certificate Authority  as that user effectively giving us access. See more [here](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation)
 
 >[!info]
->![Pasted image 20260828151212.png](/img/user/Pasted%20image%2020260828151212.png)
+>![Pasted image 20260828151212.png](/img/user/CTFs/HTB/Images/Escape%20Images/Pasted%20image%2020260828151212.png)
 >It is because of this combination of misconfigurations that will allow us to impersonate `Administrator` on this DC.
 
 ```zsh
