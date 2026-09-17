@@ -418,7 +418,7 @@ type hm.txt
 The flag is elsewhere.  Look deeper.
 C:\Users\Administrator\Desktop>
 ```
-As you can see the creator of this box thinks themselves a comedian. The flag is elsewhere.
+The creator of this box thinks themselves a comedian. The flag is elsewhere.
 
 ```zsh
 C:\Users\Administrator\Desktop>dir /R
