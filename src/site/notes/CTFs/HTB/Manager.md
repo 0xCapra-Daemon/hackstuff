@@ -538,7 +538,7 @@ Certipy v5.1.0 - by Oliver Lyak (ly4k)
 [*] Got hash for 'administrator@manager.htb': aad3b435b51404eeaad3b435b51404ee:ae5064c2f62317332c88629e025924ef
 
 ```
-We then pass that back through `certipy-ad auth` specifying our file, the server ip and domain (along with accounting for clock skew with `faketime`) and viola. NTLM hash for `Administrator` drops right to our output. PWNed.
+We then pass that back through `certipy-ad auth` specifying our file, the server ip and domain (along with accounting for clock skew with `faketime`) and voila. NTLM hash for `Administrator` drops right to our output. PWNed.
 
 ```zsh
 ┌──(kali㉿kali)-[~/CTF/HTB/manager]
