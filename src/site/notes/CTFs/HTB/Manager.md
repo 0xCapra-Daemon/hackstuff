@@ -6,7 +6,7 @@
 
 
 ## Recon
-![Pasted image 20260917200051.png](/img/user/Pasted%20image%2020260917200051.png)
+![Pasted image 20260917200051.png](/img/user/CTFs/HTB/Images/Manager%20Images/Pasted%20image%2020260917200051.png)
 
 ### Nmap:
 ```zsh
@@ -196,7 +196,7 @@ I'm going to now take this opportunity to get loot for `blodhound` analysis.
 
 ### Port 80
 #### Manual enumeration
-![Pasted image 20260917200949.png](/img/user/Pasted%20image%2020260917200949.png)
+![Pasted image 20260917200949.png](/img/user/CTFs/HTB/Images/Manager%20Images/Pasted%20image%2020260917200949.png)
 Visiting it in the browser we see it's a template site for a content writing services company.
 
 ### Port 1433 (MSSQL)
@@ -465,7 +465,7 @@ Certipy v5.1.0 - by Oliver Lyak (ly4k)
 ```
 With our compromised `Raven` user we enumerate the certificate and CA settings on the machine with `certipy-ad`. it immediately let's us know that the CA is vulnerable to [ESC7](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation) under this user's context. 
 >[!info]
-![Pasted image 20260917230019.png](/img/user/Pasted%20image%2020260917230019.png)
+![Pasted image 20260917230019.png](/img/user/CTFs/HTB/Images/Manager%20Images/Pasted%20image%2020260917230019.png)
 With ESC7 We are able to abuse our ability to: 1. modify the CA settings directly and make ourselves an officer of the CA which allows us to determine which certificates are published on the CA. 2. it also allows us to Manage requests and approve them in the CA. 
 
 ```zsh
