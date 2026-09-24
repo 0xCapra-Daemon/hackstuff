@@ -397,7 +397,7 @@ According to the certipy output we can see that Template 0: CertifiedAuthenticat
 
 >[!info]
 >![Pasted image 20260924131451.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924131451.png)
->According to certipy's wiki we there are three key factors to determining if a certificate template is truly vulnerable to ESC9: 1. The DC Certificate Binding Mode must be set to Disabled 2. The template must include "Client Authentication" in the Extended Key Usage (EKU) section. 3. Our user must have enrollment rights on the template.
+>According to certipy's wiki we there are three key factors to determining if a certificate template is truly vulnerable to ESC9: 1. The DC Certificate Binding Mode must be set to Compatibility Mode (1) or Disabled (0) in the HKLM on our target. 2. The template must include "Client Authentication" in the Extended Key Usage (EKU) section. 3. Our user must have enrollment rights on the template.
 
 As you can see above our template itself shows it satisfies conditions two and three. As for the first one I googled a powershell command to find out since our `evil-winrm` session is still active for `management_svc`
 ```zsh
