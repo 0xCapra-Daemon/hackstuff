@@ -5,7 +5,7 @@
 #windows #AD #ADCS #certipy-ad #ESC9 #bloodhound #assumed_breach #nxc #evil-winrm
 
 ## Recon
-![Pasted image 20260924111438.png](/img/user/Pasted%20image%2020260924111438.png)
+![Pasted image 20260924111438.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924111438.png)
 This one also features an assumed breach style box.
 ### Nmap:
 ```zsh
@@ -128,7 +128,7 @@ COERCE_PLUS 10.129.231.186  445    DC01             VULNERABLE, MSEven
 We successfully evaluate this target is vulnerable to several different forms of [coercion](https://attack.mitre.org/techniques/T1187/)AKA Forced Authentication. However, it ended up not being a focus of ours during this machine.
 
 >[!info]
->![Pasted image 20260924113608.png](/img/user/Pasted%20image%2020260924113608.png)
+>![Pasted image 20260924113608.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924113608.png)
 
 ### ADCS Enumeration
 #### Judith Context
@@ -170,7 +170,7 @@ I pulled ADCS data with `certipy-ad find` on our compromised user and didn't fin
 
 ## Initial Access
 ### Bloodhound Enumeration
-![Pasted image 20260924120544.png](/img/user/Pasted%20image%2020260924120544.png)
+![Pasted image 20260924120544.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924120544.png)
 Pulling Bloodhound loot via [nxc](https://www.netexec.wiki/ldap-protocol/bloodhound-ingestor) we run the saved query "Shortest path from owned objects" and we discover that we have the `WriteOwner` permission set over the Management group for this domain.
 #### WriteOwner Exploit steps
 ```zsh
@@ -203,7 +203,7 @@ LDAP        10.129.231.186  389    DC01             management_svc
 ```
 We successfully changed the owner of the group from Domain Admins to our compromised user `judith.mader`. We then must edit the permissions of our owner and give them the 'write' permission allowing us to then add our same user as a member of the group so that we may abuse this group's object control via `net rpc group addmem`
 
-![Pasted image 20260924121136.png](/img/user/Pasted%20image%2020260924121136.png)
+![Pasted image 20260924121136.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924121136.png)
 We then see as the owner and newest member of the Management group gives us `GenericWrite` over the account `MANAGEMENT_SVC`. We can attempt a targeted kerberoast and/or a shadow credential attack with this vulnerability.
 
 #### GenericWrite Exploit Steps
@@ -219,7 +219,7 @@ $krb5tgs$23$*management_svc$CERTIFIED.HTB$certified.htb/management_svc*$f6236b7e
 ```
 We successfully get the TGS hash for the service account with a targeted kerberoast. However, cracking it may prove challenging.
 
-![Pasted image 20260924122333.png](/img/user/Pasted%20image%2020260924122333.png)
+![Pasted image 20260924122333.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924122333.png)
 After several minutes, even with rules included, `jtr` completely hangs and whitewalls my processor output meaning this hash is a beefy one and unlikely to be cracked within the CTF style context. That said, it's always important to give hashes proper time to be cracked if they're gathered in a real-world engagement. With that in mind, I think it's time to pivot to shadow credential attacks. We can attempt to automate this via `certipy-ad`
 ##### Shadow Credential Attack
 ```zsh
@@ -250,11 +250,11 @@ Certipy v5.1.0 - by Oliver Lyak (ly4k)
 We successfully perform the shadow credential attack stealing the TGT for user `management_svc` as well as leaking their NT hash for Pass-the-Hash attacks right to our stdout.
 
 ##### GenericAll and User.txt
-![Pasted image 20260924124723.png](/img/user/Pasted%20image%2020260924124723.png)
+![Pasted image 20260924124723.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924124723.png)
 This is valuable because `management_svc` has full control over the `CA_OPERATOR` user which I'm assuming we can abuse ADCS with in some way.
 
 
-![Pasted image 20260924125020.png](/img/user/Pasted%20image%2020260924125020.png)
+![Pasted image 20260924125020.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924125020.png)
 Also of note this user is the only member of Remote Management meaning this is the only user, as it stands currently, that we can get an `evil-winrm` session with. Chances are `user.txt` is hiding in their User folder somewhere
 
 
@@ -396,7 +396,7 @@ I then re-pull the ADCS data via `certipy-ad find` for our new user context unde
 According to the certipy output we can see that Template 0: CertifiedAuthentication was flagged as vulnerable to [ESC9](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc9-no-security-extension-on-certificate-template): "Template has no security extension". 
 
 >[!info]
->![Pasted image 20260924131451.png](/img/user/Pasted%20image%2020260924131451.png)
+>![Pasted image 20260924131451.png](/img/user/CTFs/HTB/Images/Certified%20Images/Pasted%20image%2020260924131451.png)
 >According to certipy's wiki we there are three key factors to determining if a certificate template is truly vulnerable to ESC9: 1. The DC Certificate Binding Mode must be set to Disabled 2. The template must include "Client Authentication" in the Extended Key Usage (EKU) section. 3. Our user must have enrollment rights on the template.
 
 As you can see above our template itself shows it satisfies conditions two and three. As for the first one I googled a powershell command to find out since our `evil-winrm` session is still active for `management_svc`
