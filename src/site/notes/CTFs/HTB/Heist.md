@@ -5,7 +5,7 @@
 #windows #cisco #leaked_creds #procdump #firefox #plaintext_creds
 
 ## Recon
-![Pasted image 20260925095913.png](/img/user/Pasted%20image%2020260925095913.png)
+![Pasted image 20260925095913.png](/img/user/CTFs/HTB/Images/Heist%20Images/Pasted%20image%2020260925095913.png)
 
 ### Nmap:
 ```zsh
@@ -48,10 +48,10 @@ Nmap done: 1 IP address (1 host up) scanned in 96.50 seconds
 Port scanning shows a webserver on 80, SMB on 135 and 445, Mirosoft-HTTPAPI on 5985, and msrpc on 49669. 
 ### Port 80 (web)
 #### Manual Enumeration
-![Pasted image 20260925100246.png](/img/user/Pasted%20image%2020260925100246.png)
+![Pasted image 20260925100246.png](/img/user/CTFs/HTB/Images/Heist%20Images/Pasted%20image%2020260925100246.png)
 Visiting the web server in the browser we find a login portal with the message "24 x 7 support" at the bottom. Wappalyzer shows it's running IIS as well as PHP 7.3.1 and various JS functions. At the bottom of the login form we can see the option to "login as Guest"
 
-![Pasted image 20260925101506.png](/img/user/Pasted%20image%2020260925101506.png)
+![Pasted image 20260925101506.png](/img/user/CTFs/HTB/Images/Heist%20Images/Pasted%20image%2020260925101506.png)
 It brings us to an "issues" message board with an attachment from a customer that contains part of their Cisco router configuration. They state that the previous admin had used it in the past.
 
 ```zsh
@@ -115,8 +115,8 @@ Session completed.
 ```
 offloading that hash to `jtr` we immediately crack it for the admin's password. Also we know from the message chain that the user `Hazard` has requested that they make them a user on the target server.
 
-![Pasted image 20260925112312.png](/img/user/Pasted%20image%2020260925112312.png)
-![Pasted image 20260925112606.png](/img/user/Pasted%20image%2020260925112606.png)
+![Pasted image 20260925112312.png](/img/user/CTFs/HTB/Images/Heist%20Images/Pasted%20image%2020260925112312.png)
+![Pasted image 20260925112606.png](/img/user/CTFs/HTB/Images/Heist%20Images/Pasted%20image%2020260925112606.png)
 We also notice a couple of Cisco type 7 encoded passwords in the file. I was able to find a [decoder](https://www.firewall.cx/cisco/cisco-routers/cisco-type7-password-crack.html) online and successfully decoded the `admin` and `rout3r` ones.
 
 ```zsh
