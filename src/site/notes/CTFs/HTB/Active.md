@@ -6,7 +6,7 @@
 
 
 ## Recon
-![Pasted image 20261007101832.png](/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007101832.png)
+![active.png.png](/img/user/CTFs/HTB/Images/Active%20Images/active.png.png)
 
 ### Nmap:
 ```zsh
@@ -177,7 +177,7 @@ From there we access the share and see it as the active listing for the Users fo
 ## Privilege Escalation
 ### 389 LDAP & 88 (Kerberoast)
 #### Bloodhound
-![Pasted image 20261007105543.png](/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007105543.png)
+![bloodhound.png.png](/img/user/CTFs/HTB/Images/Active%20Images/bloodhound.png.png)
 I pulled Bloodhound loot and ran some basic queries to discover that the Administrator user is kerberoastable. This may provide a Privesc pathway, but their password hash could also be quite strong.
 
 ```zsh
@@ -253,7 +253,7 @@ From there we access the share and see it as the active listing for the Users fo
 ## Privilege Escalation
 ### 389 LDAP & 88 (Kerberoast)
 #### Bloodhound
-![Pasted image 20261007105543.png](/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007105543.png)
+![bloodhound.png.png](/img/user/CTFs/HTB/Images/Active%20Images/bloodhound.png.png)
 I pulled Bloodhound loot and ran some basic queries to discover that the Administrator user is kerberoastable. This may provide a Privesc pathway, but their password hash could also be quite strong.
 
 {{CODE_BLOCK_7}}
@@ -361,7 +361,7 @@ From there we access the share and see it as the active listing for the Users fo
 ## Privilege Escalation
 ### 389 LDAP & 88 (Kerberoast)
 #### Bloodhound
-![Pasted image 20261007105543.png](/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007105543.png)
+![bloodhound.png.png](/img/user/CTFs/HTB/Images/Active%20Images/bloodhound.png.png)
 I pulled Bloodhound loot and ran some basic queries to discover that the Administrator user is kerberoastable. This may provide a Privesc pathway, but their password hash could also be quite strong.
 
 {{CODE_BLOCK_7}}
