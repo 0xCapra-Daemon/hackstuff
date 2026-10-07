@@ -91,7 +91,78 @@ SMB         10.129.126.130  445    DC               [+] active.htb\:
 SPIDER_PLUS 10.129.126.130  445    DC               [*] Started module spidering_plus with the following options:
 SPIDER_PLUS 10.129.126.130  445    DC               [*]  DOWNLOAD_FLAG: False
 SPIDER_PLUS 10.129.126.130  445    DC               [*]     STATS_FLAG: True
-SPIDER_PLUS 10.129.126.130  445    DC               [*] EXCLUDE_FILTER: ['print
+SPIDER_PLUS 10.129.126.130  445    DC               [*] EXCLUDE_FILTER: ['print$', 'ipc$']
+SPIDER_PLUS 10.129.126.130  445    DC               [*]   EXCLUDE_EXTS: ['ico', 'lnk']
+SPIDER_PLUS 10.129.126.130  445    DC               [*]  MAX_FILE_SIZE: 50 KB
+SPIDER_PLUS 10.129.126.130  445    DC               [*]  OUTPUT_FOLDER: /home/kali/.nxc/modules/nxc_spider_plus
+SMB         10.129.126.130  445    DC               [*] Enumerated shares
+SMB         10.129.126.130  445    DC               Share           Permissions     Remark
+SMB         10.129.126.130  445    DC               -----           -----------     ------
+SMB         10.129.126.130  445    DC               ADMIN$                          Remote Admin
+SMB         10.129.126.130  445    DC               C$                              Default share
+SMB         10.129.126.130  445    DC               IPC$                            Remote IPC
+SMB         10.129.126.130  445    DC               NETLOGON                        Logon server share 
+SMB         10.129.126.130  445    DC               Replication     READ            
+SMB         10.129.126.130  445    DC               SYSVOL                          Logon server share 
+SMB         10.129.126.130  445    DC               Users                           
+SPIDER_PLUS 10.129.126.130  445    DC               [+] Saved share-file metadata to "/home/kali/.nxc/modules/nxc_spider_plus/10.129.126.130.json".
+SPIDER_PLUS 10.129.126.130  445    DC               [*] SMB Shares:           7 (ADMIN$, C$, IPC$, NETLOGON, Replication, SYSVOL, Users)
+SPIDER_PLUS 10.129.126.130  445    DC               [*] SMB Readable Shares:  1 (Replication)
+SPIDER_PLUS 10.129.126.130  445    DC               [*] Total folders found:  22
+SPIDER_PLUS 10.129.126.130  445    DC               [*] Total files found:    7
+SPIDER_PLUS 10.129.126.130  445    DC               [*] File size average:    1.16 KB
+SPIDER_PLUS 10.129.126.130  445    DC               [*] File size min:        22 B
+SPIDER_PLUS 10.129.126.130  445    DC               [*] File size max:        3.63 KB
+
+┌──(kali㉿kali)-[~/CTF/HTB/active/scanning]
+└─$ cat /home/kali/.nxc/modules/nxc_spider_plus/10.129.126.130.json| jq   
+{
+  "Replication": {
+    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/GPT.INI": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "23 B"
+    },
+    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/Group Policy/GPE.INI": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "119 B"
+    },
+    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "1.07 KB"
+    },
+    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "533 B"
+    },
+    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Registry.pol": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "2.72 KB"
+    },
+    "active.htb/Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/GPT.INI": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "22 B"
+    },
+    "active.htb/Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf": {
+      "atime_epoch": "2018-07-21 06:37:44",
+      "ctime_epoch": "2018-07-21 06:37:44",
+      "mtime_epoch": "2018-07-21 06:38:11",
+      "size": "3.63 KB"
+    }
+  }
+}
+```
 Next I used the Netexec Module called `Spider Plus` to recursively search all readable shares to our current session (Null in this case) and we see basic INI files and informational files but we do spy a `Groups.xml` file. This may leak valid Domain groups on the server so let's try and pull it down with `smbclient`
 
 ##### Downloading Groups.xml
@@ -226,145 +297,6 @@ smb: \Administrator\Desktop\> dir
 		5217023 blocks of size 4096. 279586 blocks available
 
 ```
-We successfully authenticate as `Administrator` back in to the Users share on the server via smb and find `root.txt` on their Desktop. Pwned.
-
-
-> [!Takeaways]
-> - Always recursive search the shares you have access to. You never know what's lurking inside.
-> - Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`., 'ipc
-Next I used the Netexec Module called `Spider Plus` to recursively search all readable shares to our current session (Null in this case) and we see basic INI files and informational files but we do spy a `Groups.xml` file. This may leak valid Domain groups on the server so let's try and pull it down with `smbclient`
-
-##### Downloading Groups.xml
-{{CODE_BLOCK_3}}
-What we find is actually an xml file which seems to have hardcoded creds for the `SVC_TGS` user on this domain. This could be a Ticket Granting Service account used throughout. Let's see if the password mentioned works as their domain password. We know that since this is a `Group.xml` file, it is encrypted using a commonly known AES-256 encryption key. To decode this kali has a built-in tool called `gpp-decrypt`.
-
-{{CODE_BLOCK_4}}
-And just like that we get the plaintext password for the account.
-
-{{CODE_BLOCK_5}}
-We confirm the creds are working as well as notice we have READ access to multiple shares including `Users`.
-
-{{CODE_BLOCK_6}}
-From there we access the share and see it as the active listing for the Users folder on the server including our own user's Desktop where `user.txt` is waiting for us.
-
-## Privilege Escalation
-### 389 LDAP & 88 (Kerberoast)
-#### Bloodhound
-![bloodhound.png.png](/img/user/CTFs/HTB/Images/Active%20Images/bloodhound.png.png)
-I pulled Bloodhound loot and ran some basic queries to discover that the Administrator user is kerberoastable. This may provide a Privesc pathway, but their password hash could also be quite strong.
-
-{{CODE_BLOCK_7}}
-We successfully kerberoast `Administrator` and extract their TGS hash.
-
-{{CODE_BLOCK_8}}
-And within seconds we crack the hash for `Administrator's` plaintext password.
-
-{{CODE_BLOCK_9}}
-We successfully authenticate as `Administrator` back in to the Users share on the server via smb and find `root.txt` on their Desktop. Pwned.
-
-
-> [!Takeaways]
-> - Always recursive search the shares you have access to. You never know what's lurking inside.
-> - Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`.]
-SPIDER_PLUS 10.129.126.130  445    DC               [*]   EXCLUDE_EXTS: ['ico', 'lnk']
-SPIDER_PLUS 10.129.126.130  445    DC               [*]  MAX_FILE_SIZE: 50 KB
-SPIDER_PLUS 10.129.126.130  445    DC               [*]  OUTPUT_FOLDER: /home/kali/.nxc/modules/nxc_spider_plus
-SMB         10.129.126.130  445    DC               [*] Enumerated shares
-SMB         10.129.126.130  445    DC               Share           Permissions     Remark
-SMB         10.129.126.130  445    DC               -----           -----------     ------
-SMB         10.129.126.130  445    DC               ADMIN$                          Remote Admin
-SMB         10.129.126.130  445    DC               C$                              Default share
-SMB         10.129.126.130  445    DC               IPC$                            Remote IPC
-SMB         10.129.126.130  445    DC               NETLOGON                        Logon server share 
-SMB         10.129.126.130  445    DC               Replication     READ            
-SMB         10.129.126.130  445    DC               SYSVOL                          Logon server share 
-SMB         10.129.126.130  445    DC               Users                           
-SPIDER_PLUS 10.129.126.130  445    DC               [+] Saved share-file metadata to "/home/kali/.nxc/modules/nxc_spider_plus/10.129.126.130.json".
-SPIDER_PLUS 10.129.126.130  445    DC               [*] SMB Shares:           7 (ADMIN$, C$, IPC$, NETLOGON, Replication, SYSVOL, Users)
-SPIDER_PLUS 10.129.126.130  445    DC               [*] SMB Readable Shares:  1 (Replication)
-SPIDER_PLUS 10.129.126.130  445    DC               [*] Total folders found:  22
-SPIDER_PLUS 10.129.126.130  445    DC               [*] Total files found:    7
-SPIDER_PLUS 10.129.126.130  445    DC               [*] File size average:    1.16 KB
-SPIDER_PLUS 10.129.126.130  445    DC               [*] File size min:        22 B
-SPIDER_PLUS 10.129.126.130  445    DC               [*] File size max:        3.63 KB
-
-┌──(kali㉿kali)-[~/CTF/HTB/active/scanning]
-└─$ cat /home/kali/.nxc/modules/nxc_spider_plus/10.129.126.130.json| jq   
-{
-  "Replication": {
-    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/GPT.INI": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "23 B"
-    },
-    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/Group Policy/GPE.INI": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "119 B"
-    },
-    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "1.07 KB"
-    },
-    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "533 B"
-    },
-    "active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Registry.pol": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "2.72 KB"
-    },
-    "active.htb/Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/GPT.INI": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "22 B"
-    },
-    "active.htb/Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf": {
-      "atime_epoch": "2018-07-21 06:37:44",
-      "ctime_epoch": "2018-07-21 06:37:44",
-      "mtime_epoch": "2018-07-21 06:38:11",
-      "size": "3.63 KB"
-    }
-  }
-}
-```
-Next I used the Netexec Module called `Spider Plus` to recursively search all readable shares to our current session (Null in this case) and we see basic INI files and informational files but we do spy a `Groups.xml` file. This may leak valid Domain groups on the server so let's try and pull it down with `smbclient`
-
-##### Downloading Groups.xml
-{{CODE_BLOCK_3}}
-What we find is actually an xml file which seems to have hardcoded creds for the `SVC_TGS` user on this domain. This could be a Ticket Granting Service account used throughout. Let's see if the password mentioned works as their domain password. We know that since this is a `Group.xml` file, it is encrypted using a commonly known AES-256 encryption key. To decode this kali has a built-in tool called `gpp-decrypt`.
-
-{{CODE_BLOCK_4}}
-And just like that we get the plaintext password for the account.
-
-{{CODE_BLOCK_5}}
-We confirm the creds are working as well as notice we have READ access to multiple shares including `Users`.
-
-{{CODE_BLOCK_6}}
-From there we access the share and see it as the active listing for the Users folder on the server including our own user's Desktop where `user.txt` is waiting for us.
-
-## Privilege Escalation
-### 389 LDAP & 88 (Kerberoast)
-#### Bloodhound
-![bloodhound.png.png](/img/user/CTFs/HTB/Images/Active%20Images/bloodhound.png.png)
-I pulled Bloodhound loot and ran some basic queries to discover that the Administrator user is kerberoastable. This may provide a Privesc pathway, but their password hash could also be quite strong.
-
-{{CODE_BLOCK_7}}
-We successfully kerberoast `Administrator` and extract their TGS hash.
-
-{{CODE_BLOCK_8}}
-And within seconds we crack the hash for `Administrator's` plaintext password.
-
-{{CODE_BLOCK_9}}
 We successfully authenticate as `Administrator` back in to the Users share on the server via smb and find `root.txt` on their Desktop. Pwned.
 
 

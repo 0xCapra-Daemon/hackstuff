@@ -506,7 +506,7 @@ set daemon  60
 #Enable Web Access
 set httpd port 2812
      use address 127.0.0.1
-     allow admin:3nc0d3d_pa$w0rd
+     allow admin:3nc0d3d_pa$$w0rd
 
 #Apache
 check process apache with pidfile "/var/run/apache2/apache2.pid"

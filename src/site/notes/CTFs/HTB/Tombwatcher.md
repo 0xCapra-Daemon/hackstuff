@@ -201,7 +201,18 @@ We successfully dump the NT hash for `ansible_dev$` with `gMSADumper.py`
 
 ```zsh
 ┌──(kali㉿kali)-[~/CTF/HTB/tombwatcher/exploit]
-└─$ nxc smb DC01.tombwatcher.htb -u 'ansible_dev
+└─$ nxc smb DC01.tombwatcher.htb -u 'ansible_dev$' -H '3eca34dd13a85db79c03178b7b149621' --shares
+SMB         10.129.232.167  445    DC01             [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC01) (domain:tombwatcher.htb) (signing:True) (SMBv1:None) (Null Auth:True)
+SMB         10.129.232.167  445    DC01             [+] tombwatcher.htb\ansible_dev$:3eca34dd13a85db79c03178b7b149621 
+SMB         10.129.232.167  445    DC01             [*] Enumerated shares
+SMB         10.129.232.167  445    DC01             Share           Permissions     Remark
+SMB         10.129.232.167  445    DC01             -----           -----------     ------
+SMB         10.129.232.167  445    DC01             ADMIN$                          Remote Admin
+SMB         10.129.232.167  445    DC01             C$                              Default share
+SMB         10.129.232.167  445    DC01             IPC$            READ            Remote IPC
+SMB         10.129.232.167  445    DC01             NETLOGON        READ            Logon server share 
+SMB         10.129.232.167  445    DC01             SYSVOL          READ            Logon server share 
+```
 And we confirm that the hash is good by logging in via pass-the-hash over smb on `nxc`. 
 
 ![Pasted image 20261002140129.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002140129.png)
@@ -319,7 +330,12 @@ Running a basic ldap recursive search against the ADCS OU as `john` we see that 
 
 #### Tangent (Object Injection)
 ```zsh
-└─$ impacket-addcomputer -dc-ip 'DC01.tombwatcher.htb' -computer-name 'ATTACKMOD
+└─$ impacket-addcomputer -dc-ip 'DC01.tombwatcher.htb' -computer-name 'ATTACKMOD$' -computer-pass 'Password123!' -computer-group 'OU=ADCS,DC=tombwatcher,DC=htb' 'tombwatcher.htb/john:Password123!'
+
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Successfully added machine account ATTACKMOD$ with password Password123!.
+```
 We accomplish this successfully with `impacket-addcomputer` and specifying the OU name inside the `-computer-group` flag.
 
 ```zsh
@@ -594,231 +610,6 @@ Mode                LastWriteTime         Length Name
 -ar---        10/5/2026   7:54 PM             34 root.txt
 
 ```
-After that we can successfully get an ldap shell with `certipy-ad` and the `-ldap-shell` flag as `Administrator` on the server, change their password and then get an `evil-winrm` session. pwned.
-
-## Final Thoughts
->[!Takeaways]
->- Be more vigilant when combing through `certipy-ad` output. There are more juicers than just the direct "Vulnerabilities" sections.
->- If  you have `GenericAll` over an OU that is empty you can either see if deleted accounts/objects used to belong to it or try to inject your own objects for further abuses.
->- Tombstone Reanimation gotta be the coolest sounding thing for a mundane idea. Remember that performing it is easier in powershell than trying to do it on the Linux side.
-
-
-
- -H '3eca34dd13a85db79c03178b7b149621' --shares
-SMB         10.129.232.167  445    DC01             [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC01) (domain:tombwatcher.htb) (signing:True) (SMBv1:None) (Null Auth:True)
-SMB         10.129.232.167  445    DC01             [+] tombwatcher.htb\ansible_dev$:3eca34dd13a85db79c03178b7b149621 
-SMB         10.129.232.167  445    DC01             [*] Enumerated shares
-SMB         10.129.232.167  445    DC01             Share           Permissions     Remark
-SMB         10.129.232.167  445    DC01             -----           -----------     ------
-SMB         10.129.232.167  445    DC01             ADMIN$                          Remote Admin
-SMB         10.129.232.167  445    DC01             C$                              Default share
-SMB         10.129.232.167  445    DC01             IPC$            READ            Remote IPC
-SMB         10.129.232.167  445    DC01             NETLOGON        READ            Logon server share 
-SMB         10.129.232.167  445    DC01             SYSVOL          READ            Logon server share 
-```
-And we confirm that the hash is good by logging in via pass-the-hash over smb on `nxc`. 
-
-![Pasted image 20261002140129.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002140129.png)
-Bloodhound shows us that as `ansible_dev$` we have the `ForceChangePassword` permission set over user `sam`. This permission set is self explanatory but we'll be able to set Sam's password to whatever we want now.
-
-{{CODE_BLOCK_10}}
-We successfully changed `Sam's` password on the server.
-
-![Pasted image 20261002141844.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002141844.png)
-Next we see that Sam has the `WriteOwner` permission set for user `John`. This will allow us to abuse those permissions to get access as `John`.
-
-{{CODE_BLOCK_11}}
-We successfully change owner ship of `John's` user to `Sam`. We can now abuse this by delegating the `GenericAll` Permission set and changing `John's` password from there.
-
-{{CODE_BLOCK_12}}
-We then successfully give Sam `GenericAll` permissions over user `John` with `impacket-dacledit`.
-
-{{CODE_BLOCK_13}}
-Finally we change `John's` password with `net rpc` and confirm it successfully doing so by logging in over smb with `nxc`.
-
-![Pasted image 20261002142928.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002142928.png)
-We see that John has two very interesting things tied to his user. One is that he's a member of Remote Management which means he should be able to get a shell on the system. Second is his `GenericAll` permissions over the ADCS OU. This may lead to finding some ADCS exploit under our John user's context.
-
-{{CODE_BLOCK_14}}
-And just as suspected, `user.txt` is waiting for us in John's Desktop folder.
-
-## Privilege Escalation (Tombstone + ADCS Abuse)
-
-![Pasted image 20261005133355.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261005133355.png)
-Moving to John's other interesting permission set, we target `GenericAll` over the ADCS OU. 
-
-{{CODE_BLOCK_15}}
-Running a basic ldap recursive search against the ADCS OU as `john` we see that it's completely empty. This works as a blank slate for a couple different privilege escalation scenarios. They both involve us creating a new machine object within AD and assigning it to the ADCS OU.
-
-#### Tangent (Object Injection)
-{{CODE_BLOCK_16}}
-We accomplish this successfully with `impacket-addcomputer` and specifying the OU name inside the `-computer-group` flag.
-
-{{CODE_BLOCK_17}}
-since this is an ADCS OU my first instinct is to then run a general ADCS find query for our newly made machine object inside the OU.
-{{CODE_BLOCK_18}}
-Combing back through the output we see something interesting we missed previously. We see that the `Web Server` template in ADCS gives enrollment rights to a specific account using it's Domain SID rather than username. 
-
-### Tombstone Reanimation
-
-{{CODE_BLOCK_19}}
-We can get information on an AD object (in this case an account) using built-in powershell commands from our previous session as `john`. In querying the system with the SID specified from the template in ADCS we see a deleted account for the user `cert_admin`. In that information we see that the account used to reside within the `ADCS` OU. That means if we can make it active again, we will have full control of the account via `John`.
-
-{{CODE_BLOCK_20}}
-Since this account is deleted and likely has it's AD recycle bin disabled, we must perform a [Tombstone Reanimation](https://www.ibm.com/docs/en/storage-protect/8.2.2?topic=rwiado-reanimate-tombstone-objects-restoring-from-system-state-backup) on the account in order to make it active again. We do so successfully within Powershell.
-
-{{CODE_BLOCK_21}}
-Finally we force change `cert_admin's` password since we've no idea what the original one is and now have control over the user.
-
-{{CODE_BLOCK_22}}
-Now when we view the ADCS information for the Web Server template we get two possible vulnerabilities: [ESC15](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc15-arbitrary-application-policy-injection-in-v1-templates-cve-2024-49019-ekuwu) and [ESC17](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc17-enrollee-supplied-subject-for-server-authentication). 
-
-
-### ESC15
->[!info]
->![Pasted image 20261005143645.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261005143645.png)
-Our template in question not only fills the template prerequisites, but also even is the template used in the example (Web Sever).
-
-{{CODE_BLOCK_23}}
-We can execute this vulnerability via `certipy-ad` and specifying the `administrator` as our user and `Client Authentication` as the application policy that we wish to inject which would allow us then to authenticate via this enrollment template with the credential file we generate for `administrator`.
-
-{{CODE_BLOCK_24}}
-After that we can successfully get an ldap shell with `certipy-ad` and the `-ldap-shell` flag as `Administrator` on the server, change their password and then get an `evil-winrm` session. pwned.
-
-## Final Thoughts
->[!Takeaways]
->- Be more vigilant when combing through `certipy-ad` output. There are more juicers than just the direct "Vulnerabilities" sections.
->- If  you have `GenericAll` over an OU that is empty you can either see if deleted accounts/objects used to belong to it or try to inject your own objects for further abuses.
->- Tombstone Reanimation gotta be the coolest sounding thing for a mundane idea. Remember that performing it is easier in powershell than trying to do it on the Linux side.
-
-
-
- -computer-pass 'Password123!' -computer-group 'OU=ADCS,DC=tombwatcher,DC=htb' 'tombwatcher.htb/john:Password123!'
-
-Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
-
-[*] Successfully added machine account ATTACKMOD$ with password Password123!.
-```
-We accomplish this successfully with `impacket-addcomputer` and specifying the OU name inside the `-computer-group` flag.
-
-{{CODE_BLOCK_17}}
-since this is an ADCS OU my first instinct is to then run a general ADCS find query for our newly made machine object inside the OU.
-{{CODE_BLOCK_18}}
-Combing back through the output we see something interesting we missed previously. We see that the `Web Server` template in ADCS gives enrollment rights to a specific account using it's Domain SID rather than username. 
-
-### Tombstone Reanimation
-
-{{CODE_BLOCK_19}}
-We can get information on an AD object (in this case an account) using built-in powershell commands from our previous session as `john`. In querying the system with the SID specified from the template in ADCS we see a deleted account for the user `cert_admin`. In that information we see that the account used to reside within the `ADCS` OU. That means if we can make it active again, we will have full control of the account via `John`.
-
-{{CODE_BLOCK_20}}
-Since this account is deleted and likely has it's AD recycle bin disabled, we must perform a [Tombstone Reanimation](https://www.ibm.com/docs/en/storage-protect/8.2.2?topic=rwiado-reanimate-tombstone-objects-restoring-from-system-state-backup) on the account in order to make it active again. We do so successfully within Powershell.
-
-{{CODE_BLOCK_21}}
-Finally we force change `cert_admin's` password since we've no idea what the original one is and now have control over the user.
-
-{{CODE_BLOCK_22}}
-Now when we view the ADCS information for the Web Server template we get two possible vulnerabilities: [ESC15](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc15-arbitrary-application-policy-injection-in-v1-templates-cve-2024-49019-ekuwu) and [ESC17](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc17-enrollee-supplied-subject-for-server-authentication). 
-
-
-### ESC15
->[!info]
->![Pasted image 20261005143645.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261005143645.png)
-Our template in question not only fills the template prerequisites, but also even is the template used in the example (Web Sever).
-
-{{CODE_BLOCK_23}}
-We can execute this vulnerability via `certipy-ad` and specifying the `administrator` as our user and `Client Authentication` as the application policy that we wish to inject which would allow us then to authenticate via this enrollment template with the credential file we generate for `administrator`.
-
-{{CODE_BLOCK_24}}
-After that we can successfully get an ldap shell with `certipy-ad` and the `-ldap-shell` flag as `Administrator` on the server, change their password and then get an `evil-winrm` session. pwned.
-
-## Final Thoughts
->[!Takeaways]
->- Be more vigilant when combing through `certipy-ad` output. There are more juicers than just the direct "Vulnerabilities" sections.
->- If  you have `GenericAll` over an OU that is empty you can either see if deleted accounts/objects used to belong to it or try to inject your own objects for further abuses.
->- Tombstone Reanimation gotta be the coolest sounding thing for a mundane idea. Remember that performing it is easier in powershell than trying to do it on the Linux side.
-
-
-
- -H '3eca34dd13a85db79c03178b7b149621' --shares
-SMB         10.129.232.167  445    DC01             [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC01) (domain:tombwatcher.htb) (signing:True) (SMBv1:None) (Null Auth:True)
-SMB         10.129.232.167  445    DC01             [+] tombwatcher.htb\ansible_dev$:3eca34dd13a85db79c03178b7b149621 
-SMB         10.129.232.167  445    DC01             [*] Enumerated shares
-SMB         10.129.232.167  445    DC01             Share           Permissions     Remark
-SMB         10.129.232.167  445    DC01             -----           -----------     ------
-SMB         10.129.232.167  445    DC01             ADMIN$                          Remote Admin
-SMB         10.129.232.167  445    DC01             C$                              Default share
-SMB         10.129.232.167  445    DC01             IPC$            READ            Remote IPC
-SMB         10.129.232.167  445    DC01             NETLOGON        READ            Logon server share 
-SMB         10.129.232.167  445    DC01             SYSVOL          READ            Logon server share 
-```
-And we confirm that the hash is good by logging in via pass-the-hash over smb on `nxc`. 
-
-![Pasted image 20261002140129.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002140129.png)
-Bloodhound shows us that as `ansible_dev$` we have the `ForceChangePassword` permission set over user `sam`. This permission set is self explanatory but we'll be able to set Sam's password to whatever we want now.
-
-{{CODE_BLOCK_10}}
-We successfully changed `Sam's` password on the server.
-
-![Pasted image 20261002141844.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002141844.png)
-Next we see that Sam has the `WriteOwner` permission set for user `John`. This will allow us to abuse those permissions to get access as `John`.
-
-{{CODE_BLOCK_11}}
-We successfully change owner ship of `John's` user to `Sam`. We can now abuse this by delegating the `GenericAll` Permission set and changing `John's` password from there.
-
-{{CODE_BLOCK_12}}
-We then successfully give Sam `GenericAll` permissions over user `John` with `impacket-dacledit`.
-
-{{CODE_BLOCK_13}}
-Finally we change `John's` password with `net rpc` and confirm it successfully doing so by logging in over smb with `nxc`.
-
-![Pasted image 20261002142928.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261002142928.png)
-We see that John has two very interesting things tied to his user. One is that he's a member of Remote Management which means he should be able to get a shell on the system. Second is his `GenericAll` permissions over the ADCS OU. This may lead to finding some ADCS exploit under our John user's context.
-
-{{CODE_BLOCK_14}}
-And just as suspected, `user.txt` is waiting for us in John's Desktop folder.
-
-## Privilege Escalation (Tombstone + ADCS Abuse)
-
-![Pasted image 20261005133355.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261005133355.png)
-Moving to John's other interesting permission set, we target `GenericAll` over the ADCS OU. 
-
-{{CODE_BLOCK_15}}
-Running a basic ldap recursive search against the ADCS OU as `john` we see that it's completely empty. This works as a blank slate for a couple different privilege escalation scenarios. They both involve us creating a new machine object within AD and assigning it to the ADCS OU.
-
-#### Tangent (Object Injection)
-{{CODE_BLOCK_16}}
-We accomplish this successfully with `impacket-addcomputer` and specifying the OU name inside the `-computer-group` flag.
-
-{{CODE_BLOCK_17}}
-since this is an ADCS OU my first instinct is to then run a general ADCS find query for our newly made machine object inside the OU.
-{{CODE_BLOCK_18}}
-Combing back through the output we see something interesting we missed previously. We see that the `Web Server` template in ADCS gives enrollment rights to a specific account using it's Domain SID rather than username. 
-
-### Tombstone Reanimation
-
-{{CODE_BLOCK_19}}
-We can get information on an AD object (in this case an account) using built-in powershell commands from our previous session as `john`. In querying the system with the SID specified from the template in ADCS we see a deleted account for the user `cert_admin`. In that information we see that the account used to reside within the `ADCS` OU. That means if we can make it active again, we will have full control of the account via `John`.
-
-{{CODE_BLOCK_20}}
-Since this account is deleted and likely has it's AD recycle bin disabled, we must perform a [Tombstone Reanimation](https://www.ibm.com/docs/en/storage-protect/8.2.2?topic=rwiado-reanimate-tombstone-objects-restoring-from-system-state-backup) on the account in order to make it active again. We do so successfully within Powershell.
-
-{{CODE_BLOCK_21}}
-Finally we force change `cert_admin's` password since we've no idea what the original one is and now have control over the user.
-
-{{CODE_BLOCK_22}}
-Now when we view the ADCS information for the Web Server template we get two possible vulnerabilities: [ESC15](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc15-arbitrary-application-policy-injection-in-v1-templates-cve-2024-49019-ekuwu) and [ESC17](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc17-enrollee-supplied-subject-for-server-authentication). 
-
-
-### ESC15
->[!info]
->![Pasted image 20261005143645.png](/img/user/CTFs/HTB/Images/Tombwatcher%20Images/Pasted%20image%2020261005143645.png)
-Our template in question not only fills the template prerequisites, but also even is the template used in the example (Web Sever).
-
-{{CODE_BLOCK_23}}
-We can execute this vulnerability via `certipy-ad` and specifying the `administrator` as our user and `Client Authentication` as the application policy that we wish to inject which would allow us then to authenticate via this enrollment template with the credential file we generate for `administrator`.
-
-{{CODE_BLOCK_24}}
 After that we can successfully get an ldap shell with `certipy-ad` and the `-ldap-shell` flag as `Administrator` on the server, change their password and then get an `evil-winrm` session. pwned.
 
 ## Final Thoughts

