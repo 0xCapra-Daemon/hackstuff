@@ -229,9 +229,9 @@ smb: \Administrator\Desktop\> dir
 We successfully authenticate as `Administrator` back in to the Users share on the server via smb and find `root.txt` on their Desktop. Pwned.
 
 
->[!Takeaways]
->- Always recursive search the shares you have access to. You never know what's lurking inside.
->- Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`., 'ipc
+> [!Takeaways]
+> - Always recursive search the shares you have access to. You never know what's lurking inside.
+> - Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`., 'ipc
 Next I used the Netexec Module called `Spider Plus` to recursively search all readable shares to our current session (Null in this case) and we see basic INI files and informational files but we do spy a `Groups.xml` file. This may leak valid Domain groups on the server so let's try and pull it down with `smbclient`
 
 ##### Downloading Groups.xml
@@ -263,9 +263,9 @@ And within seconds we crack the hash for `Administrator's` plaintext password.
 We successfully authenticate as `Administrator` back in to the Users share on the server via smb and find `root.txt` on their Desktop. Pwned.
 
 
->[!Takeaways]
->- Always recursive search the shares you have access to. You never know what's lurking inside.
->- Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`.]
+> [!Takeaways]
+> - Always recursive search the shares you have access to. You never know what's lurking inside.
+> - Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`.]
 SPIDER_PLUS 10.129.126.130  445    DC               [*]   EXCLUDE_EXTS: ['ico', 'lnk']
 SPIDER_PLUS 10.129.126.130  445    DC               [*]  MAX_FILE_SIZE: 50 KB
 SPIDER_PLUS 10.129.126.130  445    DC               [*]  OUTPUT_FOLDER: /home/kali/.nxc/modules/nxc_spider_plus
@@ -368,6 +368,6 @@ And within seconds we crack the hash for `Administrator's` plaintext password.
 We successfully authenticate as `Administrator` back in to the Users share on the server via smb and find `root.txt` on their Desktop. Pwned.
 
 
->[!Takeaways]
->- Always recursive search the shares you have access to. You never know what's lurking inside.
->- Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`.
+> [!Takeaways]
+> - Always recursive search the shares you have access to. You never know what's lurking inside.
+> - Anytime you see a `cpassword` key:value pair that's a job for `gpp-decrypt`.
