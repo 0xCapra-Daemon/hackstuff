@@ -6,7 +6,7 @@
 
 
 ## Recon
-![Pasted image 20261007101832.png](/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007101832.png)
+![Pasted image 20261007101832.png](src/site/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007101832.png)
 
 ### Nmap:
 ```zsh
