@@ -6,7 +6,7 @@
 
 
 ## Recon
-![Pasted image 20261007101832.png](src/site/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007101832.png)
+![Pasted image 20261007101832.png](/img/user/CTFs/HTB/Images/Active%20Images/Pasted%20image%2020261007101832.png)
 
 ### Nmap:
 ```zsh
@@ -293,7 +293,7 @@ SPIDER_PLUS 10.129.126.130  445    DC               [*] Total files found:    7
 SPIDER_PLUS 10.129.126.130  445    DC               [*] File size average:    1.16 KB
 SPIDER_PLUS 10.129.126.130  445    DC               [*] File size min:        22 B
 SPIDER_PLUS 10.129.126.130  445    DC               [*] File size max:        3.63 KB
-                                                                                                                                                                                                                                             
+
 ┌──(kali㉿kali)-[~/CTF/HTB/active/scanning]
 └─$ cat /home/kali/.nxc/modules/nxc_spider_plus/10.129.126.130.json| jq   
 {
