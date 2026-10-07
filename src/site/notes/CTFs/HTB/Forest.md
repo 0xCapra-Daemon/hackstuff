@@ -389,8 +389,10 @@ Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -ar---        10/7/2026  11:55 AM             34 root.txt
 ```
-As you can see, we successfully login via pass-the-hash as the Administrator with the hashes we stole from zerologon. Pwned even before initial access. `user.txt` can be found inside `C:\Users\svc-alfresco\Desktop`. If you remember, that account was the only account besides the Administrator that was inside the Remote Management Users group which is an indicator that in this CTF style environment that this is the only other user that can get an active shell session on the server. (this is a bit meta gamey but I believe knowing who can get a shell via that group is still useful info for windows environments).
+As you can see, we successfully login via pass-the-hash as the Administrator with the hashes we stole from zerologon. Pwned even before initial access. 
 
+> [!note about user.txt]-
+> `user.txt` can be found inside `C:\Users\svc-alfresco\Desktop`. If you remember, that account was the only account besides the Administrator that was inside the Remote Management Users group which is an indicator that in this CTF style environment that this is the only other user that can get an active shell session on the server. (this is a bit meta gamey but I believe knowing who can get a shell via that group is still useful info for windows environments).
 
 ## Final Thoughts
 >[!Takeaways]
