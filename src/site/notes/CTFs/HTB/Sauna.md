@@ -175,7 +175,7 @@ Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
 $krb5asrep$fsmith@EGOTISTICAL-BANK.LOCAL:f52a27690322c5deda18de2adfae4b45$95da308767a501348d3d843a859e289ff3d098cca4086fa96c7f1af01b9e74b51baa0d449a4cafbbe33fdac5f82b36656b607939c3231bd58e6c78f62f1596041f1fd18da3ec80e46b60a37cf6e079d081251034d0d21b3125db62b89849d43d93247a4e6182b6c7cba757b025dbd468e5e18e3a748054c4b5d988f5dbdca405e93ff042a4a10ea1d78cb2a6268b358fbf6b75c152a5bbaec29f3bc109f9fc3cc0d1895b8e8b85d162cab38dd171c706015869f9d002a0db161d403cf1459d4127606b175b466ad7e89b95fed99a17bdf4fd84633e598eece8129cd61fc6b12f418f9b9c124929fff471262272911e84ed12713124497efb4f606f182997bcf9
 ---SNIP---
 ```
-As part of our "low-hanging fruit" checks in windows environments we always check is AS-REP Roasting is possible, and this time, it turns out that it is. We successfully AS-REP Roast user `fsmith`.
+As part of our "low-hanging fruit" checks in windows environments we always check if AS-REP Roasting is possible, and this time, it turns out that it is. We successfully AS-REP Roast user `fsmith`.
 
 >[!info]
 >![Pasted image 20261008124005.png](/img/user/CTFs/HTB/Images/Sauna%20Images/Pasted%20image%2020261008124005.png)
