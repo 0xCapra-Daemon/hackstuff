@@ -205,7 +205,7 @@ LDAP        10.129.95.180   389    SAUNA            [+] EGOTISTICAL-BANK.LOCAL\f
 LDAP        10.129.95.180   389    SAUNA            FSmith
 LDAP        10.129.95.180   389    SAUNA            svc_loanmg
 ```
-We also discover that `fsmith` is a member of the Remote Management Users group which means that this user can get a shell on the system. This user or `svc_loanmg` is our target for `user.txt`.
+We also discover that `fsmith` is a member of the Remote Management Users group which means that this user can get a shell on the system. This user or `svc_loanmgr` is our target for `user.txt`.
 
 ###### User.txt
 ```zsh
