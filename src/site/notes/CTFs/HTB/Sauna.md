@@ -318,7 +318,7 @@ SAUNA$:aes128-cts-hmac-sha1-96:ffe571ff1515a089853a6b05e6b5316e
 SAUNA$:des-cbc-md5:23923eae7cdf4334
 [*] Cleaning up...
 ```
-We successfully dump the hashes for this DC including the NT hash for the Administrator we we can then use to pass the hash via `evil-winrm` to logon and get `root.txt`. pwned.
+We successfully dump the hashes for this DC including the NT hash for the Administrator which we can then use to pass the hash via `evil-winrm` to logon and get `root.txt`. pwned.
 
 ## Cheese Strat
 ### Initial Access & Privesc (zerologon)
