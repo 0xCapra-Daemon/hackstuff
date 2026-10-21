@@ -218,7 +218,7 @@ thuglegacy       (legacyy_dev_auth.pfx)
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
 ```
-We once again can rely on `john` to help us crack `legacyy's` PFX file password via `pfx2john` to create a hash format useable by `jtr`. It cracks after some time with the password for the file.`
+We once again can rely on `john` to help us crack `legacyy's` PFX file password via `pfx2john` to create a hash format useable by `jtr`. It cracks after some time with the password for the file.
 #### Extracting certificates from PFX for use in WinRM session
 ```zsh
 kali@kali:~/CTF/HTB/timelapse/files$ openssl pkcs12 -in legacyy_dev_auth.pfx -nocerts -out legacyy.key -nodes 
